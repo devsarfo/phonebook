@@ -9,6 +9,7 @@ const AuthService = createOidcAuth(
   import.meta.env.VITE_REDIRECT_URI,
   {
     authority: import.meta.env.VITE_AUTHORITY,
+    redirect_uri: import.meta.env.VITE_REDIRECT_URI,
     client_id: import.meta.env.VITE_CLIENT_ID, 
     response_type: import.meta.env.VITE_RESPONSE_TYPE,
     scope: import.meta.env.VITE_SCOPE,

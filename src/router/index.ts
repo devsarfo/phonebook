@@ -23,5 +23,7 @@ const router = createRouter({
     routes
 });
 
+AuthService.useRouter(router);
+
 export default router;
   
