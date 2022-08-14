@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import router from '@/router';
-import Header from '../../components/header.vue';
 import Footer from '@/components/footer.vue';
+import Header from '@/components/header.vue';
+import AuthService from '@/services/auth';
 
 
 const features:any = [
@@ -22,15 +22,18 @@ const features:any = [
     }
 ];
 
+
 function getStarted()
 {
-    router.push("/dashboard");
+    const auth = new AuthService();
+    auth.login();
 }
 
 </script>
 <template>
     <div class="flex flex-col min-h-screen overflow-hidden">
-        <Header :auth="false" />
+        
+        <Header />
         
         <main class="flex-grow">
             <div class="max-w-6xl mx-auto px-4 sm:px-6">
@@ -79,7 +82,6 @@ function getStarted()
             </div>
         </main>
             
-        
         <Footer />
     </div>
 </template>

@@ -1,6 +1,7 @@
 export default {
     "phonebook": "Phone Book",
     "getStarted": "Get Started",
+    "login": "Login",
     "manageYourContacts": "Manage Your Contacts",
     "onTheGo": "On The Go!",
     "promoText": "Built on top of the <b>SoftRig API</b> from <b>UNIMICRO</b>, it works on all devices, so you only have to set it up once, and get beautiful results forever.",
@@ -15,6 +16,8 @@ export default {
     "manageContacts": "Manage Contacts",
     "manageContactsHint": "View, edit and delete contacts",
     "copyright": "Made with passion by",
-    "devsarfo": "DevSarfo"
+    "devsarfo": "DevSarfo",
+    "searchHint": "Search for name, phone, e-mail or address...",
+    "logout": "Logout",
 
 }
