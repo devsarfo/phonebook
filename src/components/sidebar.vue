@@ -1,5 +1,16 @@
+<script setup lang="ts">
+
+const props = defineProps({
+    sideMenu: Boolean
+});
+
+console.log(props.sideMenu);
+
+
+</script>
+
 <template>
-    <aside class="w-64 md:block hidden">
+    <aside class="w-64 relative md:block hidden" :class="props.sideMenu ? 'block' : 'hidden'">
         <div class="overflow-y-auto py-4 px-3">
             <ul class="space-y-2">
                 <li class="mt-4 mb-8">

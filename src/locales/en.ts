@@ -29,4 +29,6 @@ export default {
     "phone": "Phone",
     "email": "E-mail Address",
     "address": "Address",
+    "save": "Save",
+    "cancel": "Cancel",
 }

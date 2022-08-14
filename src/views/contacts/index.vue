@@ -46,25 +46,23 @@ const contacts = [
     },
 ];
 
-console.log(contacts);
-
 </script>
 
 <template>
-    <div class="overflow-x-auto relative">
+    <div class="overflow-x-auto">
         <table class="w-full text-sm text-left">
             <thead class="border-b text-xs font-bold text-gray-500 uppercase">
                 <tr>
                     <th scope="col" class="contact-list-item-th">
                         {{ $t('name') }}
                     </th>
-                    <th scope="col" class="contact-list-item-th">
+                    <th scope="col" class="contact-list-item-th hidden md:table-cell">
                         {{ $t('phone') }}
                     </th>
-                    <th scope="col" class="contact-list-item-th">
+                    <th scope="col" class="contact-list-item-th hidden md:table-cell">
                         {{ $t('email') }}
                     </th>
-                    <th scope="col" class="contact-list-item-th">
+                    <th scope="col" class="contact-list-item-th hidden md:table-cell">
                         {{ $t('address') }}
                     </th>
                     <th scope="col" class="contact-list-item-th text-right">
@@ -83,13 +81,13 @@ console.log(contacts);
                     
                         {{ contact.name }}
                     </th>
-                    <td class="contact-list-item-td">
+                    <td class="contact-list-item-td hidden md:table-cell">
                         {{ contact.phone }}
                     </td>
-                    <td class="contact-list-item-td">
+                    <td class="contact-list-item-td hidden md:table-cell">
                         {{ contact.email }}
                     </td>
-                    <td class="contact-list-item-td">
+                    <td class="contact-list-item-td hidden md:table-cell">
                         {{ contact.address }}
                     </td>
                     <td>

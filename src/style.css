@@ -80,30 +80,8 @@ body {
 .form-input,
 .form-textarea,
 .form-multiselect,
-.form-select,
-.form-checkbox,
-.form-radio {
-  @apply bg-white border border-gray-300 focus:border-gray-500;
-}
-
-.form-input,
-.form-textarea,
-.form-multiselect,
-.form-select,
-.form-checkbox {
-  @apply rounded;
-}
-
-.form-input,
-.form-textarea,
-.form-multiselect,
 .form-select {
-  @apply py-3 px-4;
-}
-
-.form-input,
-.form-textarea {
-  @apply placeholder-gray-500;
+  @apply appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500
 }
 
 .form-select {
