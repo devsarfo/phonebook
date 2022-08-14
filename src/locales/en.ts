@@ -19,5 +19,14 @@ export default {
     "devsarfo": "DevSarfo",
     "searchHint": "Search for name, phone, e-mail or address...",
     "logout": "Logout",
-
+    "createContact": "Create Contact",
+    "contacts": "Contacts",
+    "recentlyAdded": "Recently Added",
+    "import": "Import",
+    "export": "Export",
+    "print": "Print",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "E-mail Address",
+    "address": "Address",
 }

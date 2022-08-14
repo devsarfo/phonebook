@@ -34,7 +34,7 @@ function logout()
 
 <template>
     <nav class="fixed w-full bg-gray-800">
-        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="max-w-full px-2 sm:px-6 lg:px-8">
             <div class="relative flex items-center justify-between h-16">
                 <div class="flex-0 flex items-center justify-center sm:items-stretch sm:justify-start">
                     <div class="flex-shrink-0 flex items-center">
@@ -74,7 +74,8 @@ function logout()
                         <div>
                             <button @click="data.menu = !data.menu"  type="button" class="btn-sm text-sm text-white bg-blue-600 hover:bg-blue-800 ml-3">
                                 <i class="fa fa-circle-user mr-2"></i>
-                                {{ initials(profile?.name) }}
+                                <div class="hidden md:block">{{ profile?.name }}</div>
+                                <div class="block md:hidden">{{ initials(profile?.name) }}</div>
                             </button>
                         </div>
 

@@ -1,6 +1,6 @@
 import AuthService from '@/services/auth';
 import Auth from '@/views/auth/index.vue';
-import Dashboard from '@/views/dashboard/index.vue';
+import Dashboard from '@/views/contacts/index.vue';
 import App from '@/views/layouts/app.vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
