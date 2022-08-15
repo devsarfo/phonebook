@@ -31,4 +31,5 @@ export default {
     "address": "Address",
     "save": "Save",
     "cancel": "Cancel",
+    "firstAndLastName": "First and Last Name"
 }

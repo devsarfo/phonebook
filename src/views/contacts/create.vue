@@ -27,7 +27,7 @@ function save()
             </div>
 
             <div class="flex gap-2">
-                <a class="btn-sm text-sm text-white bg-blue-600 hover:bg-blue-800" href="#" v-on:click="save()">
+                <a :class="contact.name?.length ? 'bg-blue-600 hover:bg-blue-800' : 'bg-gray-100 text-gray-500 shadow-inner cursor-not-allowed'" class="btn-sm text-sm text-white" href="#" v-on:click="save()">
                     {{ $t('save') }}
                 </a>
                 <router-link class="btn-sm text-sm text-red-600 hover:bg-red-600 hover:text-white" to="/">
@@ -39,13 +39,46 @@ function save()
     
     <div class="p-8">
         <form class="w-full max-w-lg">
-            <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="flex flex-wrap -mx-3 mb-6 gap-4">
                 <div class="w-full px-3">
-                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-password">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                         {{ $t('name') }}
                     </label>
-                    <input class="form-input" type="text" v-model="contact.name">
+                    
+                    <div class="relative">
+                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            <i class="fa fa-user text-gray-600"></i>
+                        </div>
+                        <input type="text" class="form-input"  v-model="contact.name" :placeholder="$t('firstAndLastName')">
+                    </div>
                 </div>
+
+                <div class="w-full px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                        {{ $t('phone') }}
+                    </label>
+                    
+                    <div class="relative">
+                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            <i class="fa fa-phone text-gray-600"></i>
+                        </div>
+                        <input type="text" class="form-input"  v-model="contact.phone" :placeholder="$t('phone')">
+                    </div>
+                </div>
+
+                <div class="w-full px-3">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
+                        {{ $t('email') }}
+                    </label>
+                    
+                    <div class="relative">
+                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            <i class="fa fa-envelope text-gray-600"></i>
+                        </div>
+                        <input type="text" class="form-input"  v-model="contact.email" :placeholder="$t('email')">
+                    </div>
+                </div>
+                
             </div>
         </form>
     </div>
