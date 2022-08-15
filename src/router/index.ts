@@ -2,6 +2,7 @@ import AuthService from '@/services/auth';
 import Auth from '@/views/auth/index.vue';
 import Create from '@/views/contacts/create.vue';
 import Dashboard from '@/views/contacts/index.vue';
+import Recent from '@/views/contacts/recent.vue';
 import App from '@/views/layouts/app.vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
@@ -15,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/dashboard',
                 component: Dashboard
+            },
+            {
+                path: '/recent',
+                component: Recent
             },
             {
                 path: '/create',

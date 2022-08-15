@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import Sidebar from '@/components/sidebar.vue';
 import AuthService from '@/services/auth';
 import { reactive } from 'vue';
-import Sidebar from '../../components/sidebar.vue';
 
 const auth = new AuthService();
 const user = await auth.getUser();

@@ -2,10 +2,19 @@
 
 import ContactService from '@/services/contact';
 import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const data = reactive({
-    count: 0
+    count: 0,
+    active: router.currentRoute.value.path
 });
+
+function setActive(menu: string)
+{
+    data.active = menu;
+}
 
 async function getCount()
 {
@@ -27,7 +36,7 @@ getCount();
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/" class="sidemenu-item-active">
+                    <router-link to="/" @click="setActive('/dashboard')" :class="data.active == '/dashboard' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa-regular fa-address-book"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('contacts') }}
@@ -38,7 +47,7 @@ getCount();
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/recent" class="sidemenu-item">
+                    <router-link to="/recent" @click="setActive('/recent')" :class="data.active == '/recent' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa fa-clock-rotate-left"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('recentlyAdded') }}
@@ -48,7 +57,7 @@ getCount();
             </ul>
             <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200">
                 <li>
-                    <router-link to="/import" class="sidemenu-item">
+                    <router-link to="/import" @click="setActive('/import')" :class="data.active == '/import' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa fa-upload"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('import') }}
@@ -56,7 +65,7 @@ getCount();
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/export" class="sidemenu-item">
+                    <router-link to="/export" @click="setActive('/export')" :class="data.active == '/export' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa fa-download"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('export') }}
@@ -64,7 +73,7 @@ getCount();
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/export" class="sidemenu-item">
+                    <router-link to="/print" @click="setActive('/print')" :class="data.active == '/print' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa fa-print"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('print') }}

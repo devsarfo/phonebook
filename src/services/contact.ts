@@ -26,7 +26,9 @@ export default class ContactService {
     public static async get(params: any)
     {   
         const skip = params?.skip ?? 0;
-        const uri = "biz/contacts?orderBy=Info.Name%20ASC&expand=Info,Info.InvoiceAddress,Info.DefaultPhone,Info.DefaultEmail,Info.DefaultAddress&hateoas=false&top=10&skip="+skip;
+        const orderBy = encodeURI(params?.orderBy ?? 'Info.Name ASC');
+        
+        const uri = "biz/contacts?expand=Info,Info.InvoiceAddress,Info.DefaultPhone,Info.DefaultEmail,Info.DefaultAddress&hateoas=false&top=10&skip="+skip+"&orderBy="+orderBy;
         const result = await axios.get(import.meta.env.VITE_BASE_URL + uri, {
             headers: {
                 "Content-Type": "application/json",
