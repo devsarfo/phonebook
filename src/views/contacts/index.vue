@@ -1,50 +1,37 @@
 <script setup lang="ts">
+import ContactService from '@/services/contact';
+import { reactive } from 'vue';
 
-const contacts = [
-    { 
-        name: "Bernard Sarfo Twumasi", 
-        phone: "+233206119718", 
-        email: "devsarfo@gmail.com",
-        address: "Løkkestredet 3, Grimstad 4876",
-    },
-    { 
-        name: "Kwaku Twumasi", 
-        phone: "+233558183873", 
-        email: "bernardsarfo3@gmail.com",
-        address: "Olam Road, AsoKwa - Kumasi",
-    },
-    { 
-        name: "Kwaku Twumasi", 
-        phone: "+233558183873", 
-        email: "",
-        address: "",
-    },
+const data = reactive<{loadingMore:boolean, loading: boolean, errors: any, contacts: any, count: number}>({
+    loading: false,
+    loadingMore: false,
+    errors: [],
+    contacts: [],
+    count: 0
+});
+
+async function getContacts()
+{
+    data.loading = true;
+    data.contacts = await ContactService.get({});
+    data.loading = false;
+}
+
+async function loadMore()
+{
+    data.loadingMore = true;
+
+    const contacts = await ContactService.get({
+        skip: data.contacts.length
+    });
+    data.contacts.push(...contacts);
     
-    { 
-        name: "Bernard Sarfo Twumasi", 
-        phone: "+233206119718", 
-        email: "devsarfo@gmail.com",
-        address: "Løkkestredet 3, Grimstad 4876",
-    },
-    { 
-        name: "Kwaku Twumasi", 
-        phone: "+233558183873", 
-        email: "bernardsarfo3@gmail.com",
-        address: "Olam Road, AsoKwa - Kumasi",
-    },
-    { 
-        name: "Bernard Sarfo Twumasi", 
-        phone: "+233206119718", 
-        email: "devsarfo@gmail.com",
-        address: "",
-    },
-    { 
-        name: "Kwaku Twumasi", 
-        phone: "", 
-        email: "bernardsarfo3@gmail.com",
-        address: "",
-    },
-];
+    const count = await ContactService.count();
+    if(data.contacts.length != count) data.loadingMore = false;
+}
+
+//Get Contacts
+getContacts();
 
 </script>
 
@@ -71,24 +58,67 @@ const contacts = [
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="contact in contacts" class="contact-list-item">
+                <tr v-if="data.loading" v-for="item in 10" class="contact-list-item">
+                    <td class="contact-list-item-td">
+                        <div class="animate-pulse flex items-center space-x-4">
+                            <div class="rounded-full bg-gray-200 h-10 w-10"></div>        
+                            <div>
+                                <div class="h-2 mb-2 bg-gray-200 w-64 rounded"></div>
+                                <div class="h-2 mb-2 bg-gray-200 w-64 rounded"></div>
+                            </div>
+                        </div>
+                        
+                    </td>
+                    <td class="contact-list-item-td hidden md:table-cell">
+                        <div class="animate-pulse flex items-center space-x-4">
+                            <div>
+                                <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                            </div>
+                        </div>
+                        
+                    </td>
+                    <td class="contact-list-item-td hidden md:table-cell">
+                        <div class="animate-pulse flex items-center space-x-4">
+                            <div>
+                                <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                            </div>
+                        </div>
+                        
+                    </td>
+                    <td class="contact-list-item-td hidden md:table-cell">
+                        <div class="animate-pulse flex items-center space-x-4">
+                            <div>
+                                <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                            </div>
+                        </div>
+                        
+                    </td>
+                    <td></td>
+                </tr>
+                
+                
+                
+                <tr v-if="!data.loading && data.contacts.length" v-for="contact in data.contacts" class="contact-list-item">
                     <th scope="row" class="flex items-center contact-list-item-td font-medium whitespace-nowrap">
-                        <div class="bg-blue-600 inline-flex overflow-hidden relative justify-center items-center w-10 h-10 rounded-full mr-2">
+                        <div class="bg-blue-600 inline-flex overflow-hidden justify-center items-center w-10 h-10 rounded-full mr-2">
                             <span class="font-medium text-white">
-                                {{ contact.name.charAt(0) }}
+                                {{ contact.Info.Name.charAt(0) }}
                             </span>
                         </div>
                     
-                        {{ contact.name }}
+                        {{ contact.Info.Name }}
                     </th>
                     <td class="contact-list-item-td hidden md:table-cell">
-                        {{ contact.phone }}
+                        {{ contact.Info.DefaultPhone.Number }}
                     </td>
                     <td class="contact-list-item-td hidden md:table-cell">
-                        {{ contact.email }}
+                        {{ contact.Info.DefaultEmail.EmailAddress }}
                     </td>
                     <td class="contact-list-item-td hidden md:table-cell">
-                        {{ contact.address }}
+                        {{ contact.Info.InvoiceAddress?.AddressLine1 }}
                     </td>
                     <td>
                         <div class="flex gap-2">
@@ -96,6 +126,27 @@ const contacts = [
                             <i class="p-2 rounded-full shadow-md fa fa-trash text-red-600 hover:text-red-800"></i>
                         </div>
                     </td>
+                </tr>
+
+                <tr v-if="!data.loadingMore && data.contacts.length">
+                    <td colspan="5" class="p-5 text-center" @click="loadMore()">
+                        <div class="hover:bg-gray-200 font-medium hover:rounded-full p-4 cursor-pointer">
+                            <i class="fa fa-download mr-2"></i>
+                            {{ $t('loadMore') }}
+                        </div>
+                    </td>
+                </tr>
+
+                <tr v-if="!data.loading && !data.contacts.length" class="contact-list-item">
+                    <th scope="row" class="flex text-gray-600 p-8 items-center contact-list-item-td font-medium whitespace-nowrap">
+                        <i class="fa fa-address-book mr-3"></i>
+                        {{ $t('noContactsFound') }}
+                    </th>
+                    
+                    <td class="contact-list-item-td hidden md:table-cell"></td>
+                    <td class="contact-list-item-td hidden md:table-cell"></td>
+                    <td class="contact-list-item-td hidden md:table-cell"></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>

@@ -26,10 +26,21 @@ export default {
     "export": "Export",
     "print": "Print",
     "name": "Name",
-    "phone": "Phone",
+    "phone": "Phone Number",
     "email": "E-mail Address",
     "address": "Address",
     "save": "Save",
+    "saving": "Saving",
     "cancel": "Cancel",
-    "firstAndLastName": "First and Last Name"
+    "select": "Select",
+    "firstAndLastName": "First and Last Name",
+    "addressLine1": "Address Line 1",
+    "addressLine2": "Address Line 2",
+    "city": "City",
+    "country": "Country",
+    "postalCode": "Postal Code",
+    "comments": "Comments",
+    "noContactsFound": "No Contacts Found",
+    "loadMore": "Load More",
+    
 }

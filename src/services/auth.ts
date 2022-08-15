@@ -37,4 +37,12 @@ export default class AuthService {
   public logout(): Promise<void> {
     return this.userManager.signoutRedirect();
   }
+
+  public static async token()
+  {
+    const auth = new AuthService();
+    const user = await auth.getUser();
+    
+    return user?.access_token;
+  }
 }
