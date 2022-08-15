@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import router from '@/router';
 import ContactService from '@/services/contact';
 import { reactive } from 'vue';
 
@@ -14,6 +15,10 @@ async function getContacts()
 {
     data.loading = true;
     data.contacts = await ContactService.get({});
+
+    const count = await ContactService.count();
+    if(data.contacts.length == count) data.loadingMore = true;
+
     data.loading = false;
 }
 
@@ -28,6 +33,41 @@ async function loadMore()
     
     const count = await ContactService.count();
     if(data.contacts.length != count) data.loadingMore = false;
+}
+
+
+function viewContact(contact: any)
+{
+    router.push({path: '/contact/' + contact.ID });
+}
+
+function editContact(contact: any)
+{
+    router.push({path: '/contact/' + contact.ID + "/edit" });
+}
+
+async function deleteContact(contact: any)
+{
+    const proceed = confirm("Delete from contacts?");
+    if(proceed)
+    {
+        data.errors = [];
+        const result = await ContactService.delete(contact.ID);
+        
+        if(!result.error)
+        {
+            data.contacts = data.contacts.filter((item: { ID: any; }) => item.ID !== contact.ID);
+        }
+        else
+        {
+            if(result.response.hasOwnProperty("ErrorsCount"))
+            {
+                result.response.Messages.forEach((message: any) => data.errors.push(message.Message));
+            }
+
+            alert(data.errors);
+        }
+    }
 }
 
 //Get Contacts
@@ -102,7 +142,7 @@ getContacts();
                 
                 
                 <tr v-if="!data.loading && data.contacts.length" v-for="contact in data.contacts" class="contact-list-item">
-                    <th scope="row" class="flex items-center contact-list-item-td font-medium whitespace-nowrap">
+                    <th @click="viewContact(contact)" scope="row" class="flex items-center contact-list-item-td font-medium whitespace-nowrap">
                         <div class="bg-blue-600 inline-flex overflow-hidden justify-center items-center w-10 h-10 rounded-full mr-2">
                             <span class="font-medium text-white">
                                 {{ contact.Info.Name.charAt(0) }}
@@ -111,19 +151,19 @@ getContacts();
                     
                         {{ contact.Info.Name }}
                     </th>
-                    <td class="contact-list-item-td hidden md:table-cell">
+                    <td @click="viewContact(contact)" class="contact-list-item-td hidden md:table-cell">
                         {{ contact.Info.DefaultPhone.Number }}
                     </td>
-                    <td class="contact-list-item-td hidden md:table-cell">
+                    <td @click="viewContact(contact)" class="contact-list-item-td hidden md:table-cell">
                         {{ contact.Info.DefaultEmail.EmailAddress }}
                     </td>
-                    <td class="contact-list-item-td hidden md:table-cell">
+                    <td @click="viewContact(contact)" class="contact-list-item-td hidden md:table-cell">
                         {{ contact.Info.InvoiceAddress?.AddressLine1 }}
                     </td>
                     <td>
                         <div class="flex gap-2">
-                            <i class="p-2 rounded-full shadow-md fa fa-pencil text-gray-600 hover:text-gray-800"></i>
-                            <i class="p-2 rounded-full shadow-md fa fa-trash text-red-600 hover:text-red-800"></i>
+                            <i @click="editContact(contact)" class="p-2 rounded-full shadow-md fa fa-pencil text-gray-600 hover:text-gray-800"></i>
+                            <i @click="deleteContact(contact)" class="p-2 rounded-full shadow-md fa fa-trash text-red-600 hover:text-red-800"></i>
                         </div>
                     </td>
                 </tr>

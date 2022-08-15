@@ -22,6 +22,25 @@ export default class ContactService {
         
         return data;
     }
+    
+    public static async delete(id: String) : Promise<any>
+    {   
+        let data;
+
+        const uri = "biz/contacts/"+id;
+        const result = await axios.delete(import.meta.env.VITE_BASE_URL + uri, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer "+ await AuthService.token()
+            }
+        }).then((response) => {
+            data = { error: false, response: response?.data };
+        }).catch((error) => {
+            data = { error: true, response: error.response.data };            
+        });
+        
+        return data;
+    }
 
     public static async get(params: any)
     {   
