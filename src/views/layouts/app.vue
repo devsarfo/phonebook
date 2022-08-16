@@ -226,6 +226,17 @@ watch(() => data.search, () => {
                             </div>
                         </td>
                     </tr>
+
+                    <tr v-if="!data.loading && !data.contacts.length" class="contact-list-item">
+                        <th scope="row" class="flex text-gray-600 p-8 items-center contact-list-item-td font-medium whitespace-nowrap">
+                            <i class="fa fa-address-book mr-3"></i>
+                            {{ $t('noContactsFound') + ' for: ' + data.search}}
+                        </th>
+                        
+                        <td class="contact-list-item-td hidden md:table-cell"></td>
+                        <td class="contact-list-item-td hidden md:table-cell"></td>
+                        <td class="contact-list-item-td hidden md:table-cell"></td>
+                    </tr>
                     
                 </tbody>
             </table>
