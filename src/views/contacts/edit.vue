@@ -151,7 +151,7 @@ onMounted(() => getContact());
                     {{ $t('saving') }}
                 </button>
                 
-                <router-link class="btn-sm text-sm text-red-600 hover:bg-red-600 hover:text-white" to="/">
+                <router-link class="btn-sm text-sm text-red-600 hover:bg-red-600 hover:text-white" :to="'/contact/'+data.contact.ID">
                     {{ $t('cancel') }}
                 </router-link>
             </div>

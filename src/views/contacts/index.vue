@@ -2,8 +2,9 @@
 import { Contact } from '@/models/contact';
 import ContactService from '@/services/contact';
 import { onMounted, reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
+const route = useRoute();
 const router = useRouter();
 const data = reactive<{loadingMore:boolean, loading: boolean, errors: any, contacts: any, count: number}>({
     loading: false,
@@ -14,7 +15,7 @@ const data = reactive<{loadingMore:boolean, loading: boolean, errors: any, conta
 });
 
 async function getContacts()
-{
+{   
     data.loading = true;
     data.contacts = await ContactService.getAll({});
 

@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import Sidebar from '@/components/sidebar.vue';
+import { Contact } from '@/models/contact';
 import AuthService from '@/services/auth';
-import { reactive } from 'vue';
+import ContactService from '@/services/contact';
+import { reactive, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
+
+const router = useRouter();
 const auth = new AuthService();
 const user = await auth.getUser();
 const profile = user?.profile;
@@ -18,20 +23,57 @@ function logout()
     auth.logout();
 }
 
-
-const data = reactive({
+const data = reactive<{sideMenu: boolean, profileMenu: boolean, searching: boolean, loading: boolean, search: string, contacts: Contact[]}>({
     sideMenu: false,
     profileMenu: false,
+    searching: false,
+    loading: false,
+    search: '',
+    contacts: []
 });
+
+
+function viewContact(contact: any)
+{
+    data.searching = false;
+    router.push({path: '/contact/' + contact.ID });
+}
 
 function toggleSide() {
     data.sideMenu = !data.sideMenu;
-    
 }
 
 function toggleProfile() {
     data.profileMenu = !data.profileMenu;
 }
+
+async function search()
+{
+    if(data.search.trim().length)
+    {
+        data.searching = true;
+        
+        data.loading = true;
+        
+        var filterString = "contains(Info.Name,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.Phones.Number,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.Emails.EmailAddress,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.InvoiceAddress.AddressLine1,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.InvoiceAddress.AddressLine2,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.InvoiceAddress.City,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.InvoiceAddress.Country,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.InvoiceAddress.PostalCode,'"+data.search.trim()+"')";
+        
+        data.contacts = await ContactService.getAll({filter: filterString});
+        data.loading = false;
+        
+    }
+    else data.searching = false;
+}
+
+watch(() => data.search, () => {
+    setTimeout(() => search(), 500);
+});
 
 
 </script>
@@ -59,10 +101,14 @@ function toggleProfile() {
                 <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                     <i class="fa fa-search text-gray-600"></i>
                 </div>
-                <input type="text" 
-                    class="pl-10 p-2 w-full text-sm text-gray-900  rounded border border-gray-500 focus:bg-white focus:outline-none bg-gray-500" 
+                <input type="text" v-model="data.search" 
+                    class="pl-10 p-2 w-full text-sm text-gray-900 rounded border border-gray-500 focus:bg-white focus:outline-none bg-gray-500" 
                     :placeholder="$t('searchHint')">
+                <div v-if="data.search.length" @click="data.search = ''" class="flex absolute inset-y-0 right-0 items-center pr-3 cursor-pointer">
+                    <i class="fa fa-close text-gray-600"></i>
+                </div>
             </div>
+            
         </div>
 
         <div class="sm:hidden block">
@@ -88,7 +134,7 @@ function toggleProfile() {
             </div>
         </div>
     </nav>
-
+    
     <div class="hidden sm:block">
         <Sidebar />
     </div>
@@ -98,8 +144,91 @@ function toggleProfile() {
     </div>
     
     <main class="pt-16 sm:pl-64" :class="data.sideMenu ? 'pl-64' : ''">
-        <div class="p-4">
-            <RouterView />
+        <!-- Page  -->
+        <RouterView v-if="!data.searching" />  
+        
+        <!-- Search Div -->
+        <div v-if="data.searching" class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="border-b text-xs font-bold text-gray-500 uppercase">
+                    <tr>
+                        <th scope="col" class="contact-list-item-th">
+                            {{ $t('name') }}
+                        </th>
+                        <th scope="col" class="contact-list-item-th hidden md:table-cell">
+                            {{ $t('phone') }}
+                        </th>
+                        <th scope="col" class="contact-list-item-th hidden md:table-cell">
+                            {{ $t('email') }}
+                        </th>
+                        <th scope="col" class="contact-list-item-th hidden md:table-cell">
+                            {{ $t('address') }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>    
+                    <tr @click="viewContact(contact)" v-if="!data.loading && data.contacts.length" v-for="contact in data.contacts" class="contact-list-item">
+                        <th scope="row" class="flex items-center contact-list-item-td font-medium whitespace-nowrap">
+                            <div class="bg-blue-600 inline-flex overflow-hidden justify-center items-center w-10 h-10 rounded-full mr-2">
+                                <span class="font-medium text-white">
+                                    {{ contact.Info.Name.charAt(0) }}
+                                </span>
+                            </div>
+                        
+                            {{ contact.Info.Name }}
+                        </th>
+                        <td class="contact-list-item-td hidden md:table-cell">
+                            {{ contact.Info.DefaultPhone.Number }}
+                        </td>
+                        <td class="contact-list-item-td hidden md:table-cell">
+                            {{ contact.Info.DefaultEmail.EmailAddress }}
+                        </td>
+                        <td class="contact-list-item-td hidden md:table-cell">
+                            {{ contact.Info.InvoiceAddress?.AddressLine1 }}
+                        </td>
+                    </tr>
+                    
+                    <tr v-if="data.loading" v-for="item in 10" class="contact-list-item">
+                        <td class="contact-list-item-td">
+                            <div class="animate-pulse flex items-center space-x-4">
+                                <div class="rounded-full bg-gray-200 h-10 w-10"></div>        
+                                <div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-64 rounded"></div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-64 rounded"></div>
+                                </div>
+                            </div>
+                            
+                        </td>
+                        <td class="contact-list-item-td hidden md:table-cell">
+                            <div class="animate-pulse flex items-center space-x-4">
+                                <div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                </div>
+                            </div>
+                            
+                        </td>
+                        <td class="contact-list-item-td hidden md:table-cell">
+                            <div class="animate-pulse flex items-center space-x-4">
+                                <div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                </div>
+                            </div>
+                            
+                        </td>
+                        <td class="contact-list-item-td hidden md:table-cell">
+                            <div class="animate-pulse flex items-center space-x-4">
+                                <div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                    <div class="h-2 mb-2 bg-gray-200 w-32 rounded"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
         </div>
     </main>
 </template>
