@@ -57,28 +57,28 @@ getCount();
             </ul>
             <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200">
                 <li>
-                    <router-link to="/import" @click="setActive('/import')" :class="data.active == '/import' ? 'sidemenu-item-active':'sidemenu-item'">
+                    <button :class="data.active == '/import' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa fa-upload"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('import') }}
                         </span>
-                    </router-link>
+                    </button>
                 </li>
                 <li>
-                    <router-link to="/export" @click="setActive('/export')" :class="data.active == '/export' ? 'sidemenu-item-active':'sidemenu-item'">
+                    <button :class="data.active == '/export' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa fa-download"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('export') }}
                         </span>
-                    </router-link>
+                    </button>
                 </li>
                 <li>
-                    <router-link to="/print" @click="setActive('/print')" :class="data.active == '/print' ? 'sidemenu-item-active':'sidemenu-item'">
+                    <button :class="data.active == '/print' ? 'sidemenu-item-active':'sidemenu-item'">
                         <i class="fa fa-print"></i>
                         <span class="flex-1 ml-3 whitespace-nowrap">
                             {{ $t('print') }}
                         </span>
-                    </router-link>
+                    </button>
                 </li>
             </ul>
         </div>

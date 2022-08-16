@@ -96,29 +96,15 @@ onMounted(() => getContact());
                     {{ $t('phone') }}
                 </label>
                 
-                <div v-for="phone in data.contact?.Info.Phones" class="grid gap-2 grid-cols-1 md:grid-cols-3">
-                    <div>
-                        <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <i class="fa fa-flag text-gray-600"></i>
-                            </div>    
-                            <p class="form-input-view">
-                                {{ phone.CountryCode }}
-                            </p>
-                        </div>
+                <div v-for="phone in data.contact?.Info.Phones" class="relative">
+                    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                        <i class="fa fa-phone text-gray-600"></i>
                     </div>
-                    <div class="col-span-2">
-                        <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <i class="fa fa-phone text-gray-600"></i>
-                            </div>
-                            <p class="form-input-view">
-                                <a :href="'tel:'+phone.CountryCode+phone.Number">
-                                    {{ phone.Number }}
-                                </a>
-                            </p>
-                        </div>
-                    </div>
+                    <p class="form-input-view">
+                        <a :href="'tel:'+phone.CountryCode+phone.Number" class="text-blue-600">
+                            {{ "(" + phone.CountryCode + ") " + phone.Number }}
+                        </a>
+                    </p>
                 </div>
             </div>
 
@@ -132,7 +118,7 @@ onMounted(() => getContact());
                         <i class="fa fa-envelope text-gray-600"></i>
                     </div>
                     <p class="form-input-view">
-                        <a :href="'mailto:'+email.EmailAddress">
+                        <a :href="'mailto:'+email.EmailAddress" class="text-blue-600">
                             {{ email.EmailAddress }}
                         </a>
                     </p>
