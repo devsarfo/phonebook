@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import router from '@/router';
+import { Contact } from '@/models/contact';
 import ContactService from '@/services/contact';
-import { reactive } from 'vue';
+import { onMounted, reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const data = reactive<{loadingMore:boolean, loading: boolean, errors: any, contacts: any, count: number}>({
     loading: false,
     loadingMore: false,
@@ -14,7 +16,7 @@ const data = reactive<{loadingMore:boolean, loading: boolean, errors: any, conta
 async function getContacts()
 {
     data.loading = true;
-    data.contacts = await ContactService.get({});
+    data.contacts = await ContactService.getAll({});
 
     const count = await ContactService.count();
     if(data.contacts.length == count) data.loadingMore = true;
@@ -26,7 +28,7 @@ async function loadMore()
 {
     data.loadingMore = true;
 
-    const contacts = await ContactService.get({
+    const contacts = await ContactService.getAll({
         skip: data.contacts.length
     });
     data.contacts.push(...contacts);
@@ -56,7 +58,7 @@ async function deleteContact(contact: any)
         
         if(!result.error)
         {
-            data.contacts = data.contacts.filter((item: { ID: any; }) => item.ID !== contact.ID);
+            data.contacts = data.contacts.filter((item: Contact) => item.ID !== contact.ID);
         }
         else
         {
@@ -70,8 +72,7 @@ async function deleteContact(contact: any)
     }
 }
 
-//Get Contacts
-getContacts();
+onMounted(() => getContacts());
 
 </script>
 

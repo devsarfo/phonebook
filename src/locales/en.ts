@@ -42,5 +42,6 @@ export default {
     "comments": "Comments",
     "noContactsFound": "No Contacts Found",
     "loadMore": "Load More",
+    "add": "Add",
     
 }

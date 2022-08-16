@@ -1,6 +1,7 @@
 import AuthService from '@/services/auth';
 import Auth from '@/views/auth/index.vue';
 import Create from '@/views/contacts/create.vue';
+import Edit from '@/views/contacts/edit.vue';
 import Dashboard from '@/views/contacts/index.vue';
 import Recent from '@/views/contacts/recent.vue';
 import App from '@/views/layouts/app.vue';
@@ -24,6 +25,10 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/create',
                 component: Create
+            },
+            {
+                path: '/contact/:id/edit',
+                component: Edit
             }
         ]
     },
