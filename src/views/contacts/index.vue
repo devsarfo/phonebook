@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const data = reactive<{loadingMore:boolean, loading: boolean, errors: any, contacts: any, count: number}>({
     loading: false,
-    loadingMore: false,
+    loadingMore: true,
     errors: [],
     contacts: [],
     count: 0
@@ -20,6 +20,7 @@ async function getContacts()
 
     const count = await ContactService.count();
     if(data.contacts.length == count) data.loadingMore = true;
+    else data.loadingMore = false;
 
     data.loading = false;
 }

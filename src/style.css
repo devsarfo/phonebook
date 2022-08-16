@@ -98,6 +98,10 @@ body {
   @apply pl-10 appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500
 }
 
+.form-input-view {
+  @apply pl-10 py-5 block w-full text-gray-800 py-3 px-4 mb-3;
+}
+
 .form-select {
   @apply pr-10;
 }

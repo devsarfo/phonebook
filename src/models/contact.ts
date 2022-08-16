@@ -36,6 +36,6 @@ export interface Contact
     Phones: Phone[],
     InvoiceAddressID?: Number,
     InvoiceAddress: Address,
-    Addresses: Address[]
+    Addresses?: Address[]
   }
 }

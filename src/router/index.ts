@@ -4,6 +4,7 @@ import Create from '@/views/contacts/create.vue';
 import Edit from '@/views/contacts/edit.vue';
 import Dashboard from '@/views/contacts/index.vue';
 import Recent from '@/views/contacts/recent.vue';
+import View from '@/views/contacts/view.vue';
 import App from '@/views/layouts/app.vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
@@ -25,6 +26,10 @@ const routes: Array<RouteRecordRaw> = [
             {
                 path: '/create',
                 component: Create
+            },
+            {
+                path: '/contact/:id',
+                component: View
             },
             {
                 path: '/contact/:id/edit',

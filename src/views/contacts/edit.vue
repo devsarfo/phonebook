@@ -34,8 +34,7 @@ const data = reactive<{contact: Contact, id: string, loading: boolean, errors: a
                 EmailAddress: ''
             },
             Phones: [],
-            Emails: [],
-            Addresses: []
+            Emails: []
         },
         Comment: ''
     }
@@ -121,7 +120,6 @@ async function getContact()
 {
     data.loading = true;
     data.contact = await ContactService.get(data.id);
-    console.log(data.contact.Info);
     
     data.loading = false;
 }

@@ -43,5 +43,7 @@ export default {
     "noContactsFound": "No Contacts Found",
     "loadMore": "Load More",
     "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
     
 }
