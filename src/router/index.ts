@@ -13,7 +13,6 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         redirect: '/dashboard',
         component: App,
-        meta: { auth: true },
         children: [
             {
                 path: '/dashboard',

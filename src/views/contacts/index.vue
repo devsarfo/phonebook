@@ -17,11 +17,14 @@ const data = reactive<{loadingMore:boolean, loading: boolean, errors: any, conta
 async function getContacts()
 {   
     data.loading = true;
-    data.contacts = await ContactService.getAll({});
+    data.contacts = await ContactService.getAll();
 
-    const count = await ContactService.count();
-    if(data.contacts.length == count) data.loadingMore = true;
-    else data.loadingMore = false;
+    if(data.contacts.length)
+    {
+        const count = await ContactService.count();
+        if(data.contacts.length == count) data.loadingMore = true;
+        else data.loadingMore = false;
+    }
 
     data.loading = false;
 }
@@ -30,9 +33,7 @@ async function loadMore()
 {
     data.loadingMore = true;
 
-    const contacts = await ContactService.getAll({
-        skip: data.contacts.length
-    });
+    const contacts = await ContactService.getAll({skip: data.contacts.length});
     data.contacts.push(...contacts);
     
     const count = await ContactService.count();
@@ -155,13 +156,23 @@ onMounted(() => getContacts());
                         {{ contact.Info.Name }}
                     </th>
                     <td @click="viewContact(contact)" class="contact-list-item-td hidden md:table-cell">
-                        {{ contact.Info.DefaultPhone.Number }}
+                        <p v-for="phone in contact.Info.Phones" class="mb-2">
+                            {{ "(" + phone.CountryCode + ") " + phone.Number }}
+                        </p>
                     </td>
                     <td @click="viewContact(contact)" class="contact-list-item-td hidden md:table-cell">
-                        {{ contact.Info.DefaultEmail.EmailAddress }}
+                        <p v-for="email in contact.Info.Emails" class="mb-2">
+                            {{ email.EmailAddress }}
+                        </p>
                     </td>
                     <td @click="viewContact(contact)" class="contact-list-item-td hidden md:table-cell">
-                        {{ contact.Info.InvoiceAddress?.AddressLine1 }}
+                        {{ 
+                            (contact.Info.InvoiceAddress?.AddressLine1 + " " + 
+                                contact.Info.InvoiceAddress?.AddressLine2 + " " + 
+                                contact.Info.InvoiceAddress?.City + " " + 
+                                contact.Info.InvoiceAddress?.PostalCode
+                            ).trim()
+                        }}
                     </td>
                     <td>
                         <div class="flex gap-2">

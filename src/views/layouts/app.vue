@@ -14,7 +14,7 @@ const profile = user?.profile;
 
 function initials(name: any)
 {
-    return name.match(/(\b\S)?/g).join("").toUpperCase();
+    return name?.match(/(\b\S)?/g).join("").toUpperCase();
 }
 
 
@@ -23,11 +23,12 @@ function logout()
     auth.logout();
 }
 
-const data = reactive<{sideMenu: boolean, profileMenu: boolean, searching: boolean, loading: boolean, search: string, contacts: Contact[]}>({
+const data = reactive<{mobileSearch: boolean, sideMenu: boolean, profileMenu: boolean, searching: boolean, loading: boolean, search: string, contacts: Contact[]}>({
     sideMenu: false,
     profileMenu: false,
     searching: false,
     loading: false,
+    mobileSearch: false,
     search: '',
     contacts: []
 });
@@ -35,16 +36,9 @@ const data = reactive<{sideMenu: boolean, profileMenu: boolean, searching: boole
 
 function viewContact(contact: any)
 {
+    data.mobileSearch = false;
     data.searching = false;
     router.push({path: '/contact/' + contact.ID });
-}
-
-function toggleSide() {
-    data.sideMenu = !data.sideMenu;
-}
-
-function toggleProfile() {
-    data.profileMenu = !data.profileMenu;
 }
 
 async function search()
@@ -52,10 +46,10 @@ async function search()
     if(data.search.trim().length)
     {
         data.searching = true;
-        
         data.loading = true;
         
         var filterString = "contains(Info.Name,'"+data.search.trim()+"')";
+        filterString += " or contains(Info.Phones.CountryCode,'"+data.search.trim()+"')";
         filterString += " or contains(Info.Phones.Number,'"+data.search.trim()+"')";
         filterString += " or contains(Info.Emails.EmailAddress,'"+data.search.trim()+"')";
         filterString += " or contains(Info.InvoiceAddress.AddressLine1,'"+data.search.trim()+"')";
@@ -66,13 +60,24 @@ async function search()
         
         data.contacts = await ContactService.getAll({filter: filterString});
         data.loading = false;
-        
     }
-    else data.searching = false;
+    else 
+    {
+        data.mobileSearch = false;
+        data.searching = false;
+    }
 }
 
+
 watch(() => data.search, () => {
-    setTimeout(() => search(), 500);
+    const timeoutId = window.setTimeout(() => {}, 0);
+    for (let id = timeoutId; id >= 0; id -= 1) {
+        window.clearTimeout(id);
+    }
+
+    setTimeout(() => {
+        search();
+    }, 500);
 });
 
 
@@ -81,7 +86,7 @@ watch(() => data.search, () => {
     <nav class="fixed px-2 sm:px-6 lg:px-8 top-0 inset-x-0 z-50 h-16 text-white bg-gray-800 font-medium flex justify-between items-center">
         <div class="p-4 sm:w-64">
             <div class="flex-0 flex items-center justify-center sm:items-stretch sm:justify-start">
-                <button class="p-1 hover:text-white mr-4 block sm:hidden" @click="toggleSide()">
+                <button class="p-1 hover:text-white mr-4 block sm:hidden" @click="data.sideMenu = !data.sideMenu">
                     <i v-if="!data.sideMenu" class="fa fa-bars fa-lg text-white cursor-pointer"></i>
                     <i v-if="data.sideMenu" class="fa fa-close fa-lg text-white cursor-pointer"></i>
                 </button>
@@ -111,11 +116,11 @@ watch(() => data.search, () => {
             
         </div>
 
-        <div class="sm:hidden block">
-            <i class="fa fa-search"></i>
-        </div>
-        
         <div class="inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <div @click="data.mobileSearch = !data.mobileSearch" class="sm:hidden block relative">
+                <i class="fa fa-search"></i>
+            </div>
+            
             <div class="ml-3 relative">
                 <div>
                     <button @click="data.profileMenu = !data.profileMenu"  type="button" class="btn-sm text-sm text-white bg-blue-600 hover:bg-blue-800 ml-3">
@@ -134,6 +139,20 @@ watch(() => data.search, () => {
             </div>
         </div>
     </nav>
+    
+     <div v-if="data.mobileSearch" :class="data.sideMenu ? 'pl-64' : ''" class="sm:hidden block w-full mt-16 pt-2 px-2">
+        <div class="relative">
+            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                <i class="fa fa-search text-gray-600"></i>
+            </div>
+            <input type="text" v-model="data.search" 
+                class="pl-10 p-2 w-full text-sm text-gray-900 rounded border border-gray-500 focus:bg-white focus:outline-none bg-gray-500" 
+                :placeholder="$t('searchHint')">
+            <div v-if="data.search.length" @click="data.search = ''" class="flex absolute inset-y-0 right-0 items-center pr-3 cursor-pointer">
+                <i class="fa fa-close text-gray-600"></i>
+            </div>
+        </div>
+    </div>
     
     <div class="hidden sm:block">
         <Sidebar />
@@ -178,13 +197,23 @@ watch(() => data.search, () => {
                             {{ contact.Info.Name }}
                         </th>
                         <td class="contact-list-item-td hidden md:table-cell">
-                            {{ contact.Info.DefaultPhone.Number }}
+                            <p v-for="phone in contact.Info.Phones" class="mb-2">
+                            {{ "(" + phone.CountryCode + ") " + phone.Number }}
+                        </p>
                         </td>
                         <td class="contact-list-item-td hidden md:table-cell">
-                            {{ contact.Info.DefaultEmail.EmailAddress }}
+                            <p v-for="email in contact.Info.Emails" class="mb-2">
+                                {{ email.EmailAddress }}
+                            </p>
                         </td>
                         <td class="contact-list-item-td hidden md:table-cell">
-                            {{ contact.Info.InvoiceAddress?.AddressLine1 }}
+                            {{ 
+                                (contact.Info.InvoiceAddress?.AddressLine1 + " " + 
+                                    contact.Info.InvoiceAddress?.AddressLine2 + " " + 
+                                    contact.Info.InvoiceAddress?.City + " " + 
+                                    contact.Info.InvoiceAddress?.PostalCode
+                                ).trim()
+                            }}
                         </td>
                     </tr>
                     

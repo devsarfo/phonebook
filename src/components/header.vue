@@ -2,10 +2,10 @@
 
 import AuthService from '@/services/auth';
 
-const auth = new AuthService();
 
 function getStarted()
 {
+    const auth = new AuthService();
     auth.login();
 }
 
