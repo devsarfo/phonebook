@@ -5,6 +5,7 @@ import Edit from '@/views/contacts/edit.vue';
 import Dashboard from '@/views/contacts/index.vue';
 import Recent from '@/views/contacts/recent.vue';
 import View from '@/views/contacts/view.vue';
+import Error from '@/views/errors/404.vue';
 import App from '@/views/layouts/app.vue';
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
@@ -40,6 +41,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "/auth",
         component: Auth
     },
+    {
+        path: '/:catch(.*)', 
+        component: Error
+    }
 ];
 
 const router = createRouter({

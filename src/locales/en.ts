@@ -45,5 +45,8 @@ export default {
     "add": "Add",
     "edit": "Edit",
     "delete": "Delete",
-    
+    "404": "404",
+    "title404": "Something is missing",
+    "description404": "Sorry, we can't find that page. You'll find a lot to explore on the home page",
+    "backToHome": "Back To Home"
 }
