@@ -2,7 +2,7 @@
 import { Contact } from '@/models/contact';
 import countries from '@/models/country';
 import { Email } from '@/models/email';
-import Guid from '@/models/Guid';
+import Guid from '@/models/guid';
 import { Phone } from '@/models/phone';
 import ContactService from '@/services/contact';
 import { onMounted, reactive } from 'vue';
